@@ -1,0 +1,8 @@
+python3 -m streamlit run aws-qa-webapp.py &
+
+python3 -m streamlit run web.py --server.port 8080 &
+
+
+post api gateway
+chat:
+curl -X POST -d "怎么使用usb钥匙" https://9ek0hrjut6.execute-api.us-east-1.amazonaws.com/chat_by_telsa_bot
