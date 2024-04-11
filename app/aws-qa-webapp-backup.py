@@ -1,16 +1,53 @@
+"""
+A simple web application to implement a chatbot. This app uses Streamlit 
+for the UI and the Python requests package to talk to an API endpoint that
+implements text generation and Retrieval Augmented Generation (RAG) using LLMs
+and Amazon OpenSearch as the vector database.
+"""
 import base64
-
+import datetime
 import json
-
+import uuid
 
 import streamlit as st
 import requests as req
 from typing import List, Tuple, Dict
 
-from utils.webutils import get_user_id
+from streamlit import runtime
+from streamlit.runtime.scriptrunner import get_script_run_ctx
+from extra_streamlit_components import CookieManager
 
 # Page title
 st.set_page_config(page_title='AWS Q&A', layout='wide')
+
+
+def get_user_id() -> str:
+    cookies = CookieManager()
+    if cookies.get("user_id") is None:
+        sess_id = str(uuid.uuid4())
+        print(f"sess_id={sess_id}")
+        cookies.set("user_id", sess_id, expires_at=datetime.datetime(year=2025, month=12, day=1))
+
+    user_id = cookies.get("user_id")
+    return user_id
+
+
+def get_remote_ip() -> str:
+    """Get remote ip."""
+
+    try:
+        ctx = get_script_run_ctx()
+        if ctx is None:
+            return None
+
+        session_info = runtime.get_instance().get_client(ctx.session_id)
+        if session_info is None:
+            return None
+    except Exception as e:
+        return None
+
+    return session_info.request.remote_ip
+
 
 # def _get_session():
 #     from streamlit.runtime import get_instance
@@ -25,6 +62,9 @@ st.set_page_config(page_title='AWS Q&A', layout='wide')
 
 # 生成唯一的会话 ID
 session_id = get_user_id()
+
+print(f"session_id={session_id}")
+
 outputs = {}
 
 # global constants
@@ -74,11 +114,11 @@ with st.sidebar:
     st.subheader('control panel')
     btns = st.container()
 
-    if btns.button("clear context"):
-        for key in st.session_state.keys():
-            del st.session_state[key]
-        # TODO should call api to remove history in dynamodb
-        st.experimental_rerun()
+if btns.button("clear history"):
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    # TODO should call api to remove history in dynamodb
+    st.experimental_rerun()
 
 # get user input
 user_input: str = get_user_input()
