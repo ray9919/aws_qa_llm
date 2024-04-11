@@ -1,2 +1,3 @@
 streamlit==1.22.0
 boto3==1.26.129
+extra-streamlit-components==0.1.71
