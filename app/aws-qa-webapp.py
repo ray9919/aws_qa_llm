@@ -7,7 +7,7 @@ import streamlit as st
 import requests as req
 from typing import List, Tuple, Dict
 
-from utils.webutils import get_user_id
+from webutils import get_user_id
 
 # Page title
 st.set_page_config(page_title='AWS Q&A', layout='wide')
