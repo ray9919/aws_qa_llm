@@ -2,11 +2,9 @@ import base64
 
 import json
 
-
 import streamlit as st
 import requests as req
 from typing import List, Tuple, Dict
-
 
 import datetime
 import uuid
@@ -15,9 +13,9 @@ import extra_streamlit_components as stx
 from streamlit import runtime
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 
-
 # Page title
 st.set_page_config(page_title='AWS Q&A', layout='wide')
+
 
 def get_user_id() -> str:
     cookies = stx.CookieManager()
@@ -36,9 +34,6 @@ def get_all_cookies():
         print(f'cookie = {c} ,value = {cm.get(c)}')
 
 
-"""Get remote ip."""
-
-
 def get_remote_ip() -> str:
     try:
         ctx = get_script_run_ctx()
@@ -52,7 +47,6 @@ def get_remote_ip() -> str:
         return None
 
     return session_info.request.remote_ip
-
 
 
 # def _get_session():
