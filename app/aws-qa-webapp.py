@@ -148,9 +148,9 @@ if user_input:
     print(f'================')
     st.session_state.past.append(user_input)
     if resp['is_found_in_kb']:
-        output = '【以下回答根据知识库查询记录+大模型数据生成】' + output
+        output = '【以下回答根据知识库查询记录生成】' + output
     else:
-        output = '【以下回答根据大模型自身数据生成】' + output
+        output = '' + output
     st.session_state.generated.append(output)
 
 # download the chat history
